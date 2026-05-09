@@ -73,3 +73,14 @@ func sortGroup(s [][]string) {
 		return s[i][0] < s[j][0]
 	})
 }
+
+func TestTopKFrequent(t *testing.T) {
+	nums := []int{1, 2, 2, 3, 3, 3}
+	k := 2
+	target := []int{2, 3}
+	result := topKFrequent(nums, k)
+
+	if !slices.Equal(result, target) {
+		t.Errorf("topKFrequent= %v; want %v", result, k)
+	}
+}

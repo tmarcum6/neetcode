@@ -3,12 +3,17 @@ package main
 import (
 	"fmt"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 func main() {
-	strs := []string{"act", "pots", "tops", "cat", "stop", "hat"}
-	ret := groupAnagrams(strs)
-	fmt.Println(ret)
+	input := []string{"Hello", "World"}
+	s := Solution{}
+	t := s.Encode(input)
+	k := s.Decode(t)
+	fmt.Println(k)
+
 }
 
 func hasDuplicate(nums []int) bool {
@@ -81,9 +86,104 @@ func groupAnagrams(strs []string) [][]string {
 
 func sortStrings(s string) string {
 	chars := []rune(s)
-	//sorts if i is < j (alphabetically)
 	sort.Slice(chars, func(i, j int) bool {
 		return chars[i] < chars[j]
 	})
 	return string(chars)
+}
+
+func topKFrequent(nums []int, k int) []int {
+	// n = total number of elements in nums
+	// m = number of unique elements in nums
+
+	// Time: O(n)
+	// We iterate through nums once to build the frequency map.
+	// Space: O(m)
+	counterMap := make(map[int]int)
+	for _, n := range nums {
+		counterMap[n]++
+	}
+
+	// Time: O(m)
+	// We convert the map into a slice of size m.
+	// Space: O(m)
+	sorted := []KVPair{}
+	for key, value := range counterMap {
+		sorted = append(sorted, KVPair{key, value})
+	}
+
+	// Time: O(m log m)
+	// Sorting m unique elements by frequency.
+	// Space: O(1) auxiliary (in-place sort)
+	sort.Slice(sorted, func(i, j int) bool {
+		return sorted[i].Value > sorted[j].Value
+	})
+
+	// Time: O(k)
+	// Extract top k elements.
+	// Space: O(k)
+	ret := make([]int, k)
+	for i := 0; i < k; i++ {
+		ret[i] = sorted[i].Key
+	}
+
+	// Total Time Complexity:
+	// O(n + m log m)
+	// Worst case: m = n → O(n log n)
+	//
+	// Total Space Complexity:
+	// O(m + k)
+	// Worst case: O(n)
+
+	// Bucket / Heap sort to optimize
+
+	return ret
+}
+
+type KVPair struct {
+	Key   int
+	Value int
+}
+
+type Solution struct{}
+
+func (s *Solution) Encode(strs []string) string {
+	b := strings.Builder{}
+
+	for _, s := range strs {
+		b.WriteString(strconv.Itoa(len(s)))
+		b.WriteByte('#')
+		b.WriteString(s)
+	}
+
+	return b.String()
+}
+
+func (s *Solution) Decode(encoded string) []string {
+	result := []string{}
+	i := 0
+	for i < len(encoded) {
+		j := i
+		for j < len(encoded) && encoded[j] != '#' {
+			j++
+		}
+
+		if j == len(encoded) {
+			break
+		}
+
+		length, _ := strconv.Atoi(encoded[i:j])
+
+		j++
+
+		if j+length > len(encoded) {
+			break
+		}
+
+		result = append(result, encoded[j:j+length])
+
+		i = j + length
+	}
+
+	return result
 }
