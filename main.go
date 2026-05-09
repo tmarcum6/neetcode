@@ -8,12 +8,8 @@ import (
 )
 
 func main() {
-	input := []string{"Hello", "World"}
-	s := Solution{}
-	t := s.Encode(input)
-	k := s.Decode(t)
-	fmt.Println(k)
-
+	t := []int{1, 2, 4, 6}
+	_ = productExceptSelf(t)
 }
 
 func hasDuplicate(nums []int) bool {
@@ -148,42 +144,132 @@ type KVPair struct {
 type Solution struct{}
 
 func (s *Solution) Encode(strs []string) string {
+	// n = number of strings
+	// m = total number of characters across all strings
+
+	// Space: O(m)
+	// strings.Builder stores the full encoded output.
 	b := strings.Builder{}
 
+	// Time: O(n + m)
+	// We iterate through each string once and write:
+	// - the string length
+	// - separator '#'
+	// - the string contents
 	for _, s := range strs {
-		b.WriteString(strconv.Itoa(len(s)))
-		b.WriteByte('#')
-		b.WriteString(s)
+		b.WriteString(strconv.Itoa(len(s))) // O(log len(s))
+		b.WriteByte('#')                    // O(1)
+		b.WriteString(s)                    // O(len(s))
 	}
 
+	// Time: O(m)
+	// Converts builder buffer into final string.
 	return b.String()
 }
 
 func (s *Solution) Decode(encoded string) []string {
+	// m = total length of encoded string
+
+	// Space: O(m)
+	// Result stores all decoded strings.
 	result := []string{}
+
+	// i tracks current parsing position.
 	i := 0
+
+	// Time: O(m)
+	// Each character in encoded is visited at most once.
 	for i < len(encoded) {
+
+		// j scans forward to find '#'
 		j := i
+
+		// Time across all iterations: O(m)
+		// Finds the separator for current encoded string.
 		for j < len(encoded) && encoded[j] != '#' {
 			j++
 		}
 
+		// Safety check for malformed input.
 		if j == len(encoded) {
 			break
 		}
 
+		// Time: O(length digits)
+		// Converts substring length -> integer.
 		length, _ := strconv.Atoi(encoded[i:j])
 
-		j++
+		j++ // skip '#'
 
+		// Bounds safety check.
 		if j+length > len(encoded) {
 			break
 		}
 
+		// Time: O(length)
+		// Extract substring and append to result.
 		result = append(result, encoded[j:j+length])
 
+		// Move to next encoded segment.
 		i = j + length
 	}
 
+	// Total Time Complexity:
+	// O(m)
+	// Every character is processed at most once.
+	//
+	// Total Space Complexity:
+	// O(m)
+	// Output storage dominates.
+
 	return result
+}
+
+func productExceptSelf(nums []int) []int {
+	n := len(nums)
+	ret := make([]int, n)
+
+	// n = number of elements in nums
+
+	// --------------------------
+	// SPACE COMPLEXITY
+	// --------------------------
+	// Space: O(1) extra space (excluding output array)
+	// ret is required for the output, so it is NOT counted as extra space.
+	// Only one extra variable is used: "right" → O(1)
+
+	// --------------------------
+	// LEFT PASS (prefix products)
+	// --------------------------
+	// Time: O(n)
+	// Space: O(1) extra
+	// We store prefix products directly in ret.
+	ret[0] = 1
+	for i := 1; i < n; i++ {
+		ret[i] = ret[i-1] * nums[i-1]
+	}
+
+	// --------------------------
+	// RIGHT PASS (suffix products)
+	// --------------------------
+	// Time: O(n)
+	// Space: O(1) extra
+	// We use a single variable "right" to accumulate suffix product.
+	right := 1
+	for i := n - 1; i >= 0; i-- {
+		ret[i] *= right
+		right *= nums[i]
+
+		// Debug only
+		// fmt.Println(right)
+	}
+
+	// --------------------------
+	// TOTAL COMPLEXITY
+	// --------------------------
+	// Time: O(n)
+	// Space: O(1) extra space (excluding output array)
+	// Reason: we only use constant extra variables regardless of input size
+
+	return ret
 }

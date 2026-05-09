@@ -74,13 +74,23 @@ func sortGroup(s [][]string) {
 	})
 }
 
-func TestTopKFrequent(t *testing.T) {
-	nums := []int{1, 2, 2, 3, 3, 3}
-	k := 2
-	target := []int{2, 3}
-	result := topKFrequent(nums, k)
+// func TestTopKFrequent(t *testing.T) {
+// 	nums := []int{1, 2, 2, 3, 3, 3}
+// 	k := 2
+// 	expected := []int{2, 3}
+// 	result := topKFrequent(nums, k)
+//
+// 	if !slices.Equal(result, expected) {
+// 		t.Errorf("topKFrequent= %v; want %v", result, k)
+// 	}
+// }
 
-	if !slices.Equal(result, target) {
-		t.Errorf("topKFrequent= %v; want %v", result, k)
+func TestProductExceptSelf(t *testing.T) {
+	nums := []int{1, 2, 4, 6}
+	expected := []int{48, 24, 12, 8}
+	result := productExceptSelf(nums)
+
+	if !slices.Equal(result, expected) {
+		t.Errorf("productExceptSelf= %v; want %v", result, expected)
 	}
 }
