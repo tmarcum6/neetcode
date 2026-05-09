@@ -94,3 +94,13 @@ func TestProductExceptSelf(t *testing.T) {
 		t.Errorf("productExceptSelf= %v; want %v", result, expected)
 	}
 }
+
+func TestLongestConsecutive(t *testing.T) {
+	nums := []int{2, 20, 4, 10, 3, 4, 5}
+	expected := 5
+	result := longestConsecutive(nums)
+
+	if expected != result {
+		t.Errorf("longestConsecutive= %v; want %v", result, expected)
+	}
+}

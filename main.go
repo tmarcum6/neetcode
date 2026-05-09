@@ -8,8 +8,9 @@ import (
 )
 
 func main() {
-	t := []int{1, 2, 4, 6}
-	_ = productExceptSelf(t)
+	t := "Was it a car or a cat I saw?"
+	b := isPalindrome(t)
+	fmt.Println(b)
 }
 
 func hasDuplicate(nums []int) bool {
@@ -272,4 +273,75 @@ func productExceptSelf(nums []int) []int {
 	// Reason: we only use constant extra variables regardless of input size
 
 	return ret
+}
+
+func longestConsecutive(nums []int) int {
+	//must be O(n) - one loop
+
+	//n = number of integers in nums
+	//m = space for each index in nums
+
+	//can be negative
+
+	m := make(map[int]bool)
+	for _, v := range nums {
+		m[v] = true
+	}
+
+	longest := 0
+	for v := range m {
+		//if the number before v does not exist we are at the start of a seq
+		if !m[v-1] {
+			current := v
+			streak := 1
+
+			//continue until seq chain is broken
+			for m[current+1] {
+				current++
+				streak++
+			}
+
+			if streak > longest {
+				longest = streak
+			}
+		}
+	}
+
+	return longest
+}
+
+func isPalindrome(s string) bool {
+	b := strings.Builder{}
+
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+
+		if c >= 'a' && c <= 'z' ||
+			c >= 'A' && c <= 'Z' ||
+			c >= '0' && c <= '9' {
+			b.WriteByte(c)
+		}
+	}
+
+	filteredString := b.String()
+	filteredString = strings.ToLower(filteredString)
+
+	i := 0
+	j := len(filteredString) - 1
+	r := []rune(filteredString)
+
+	for i < j {
+		if r[i] != r[j] {
+			return false
+		}
+		i++
+		j--
+	}
+
+	return true
+}
+
+func threeSum(nums []int) [][]int {
+
+	return [][]int{}
 }
