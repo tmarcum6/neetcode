@@ -1,17 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	t := "Was it a car or a cat I saw?"
-	b := isPalindrome(t)
-	fmt.Println(b)
-}
+func main() {}
 
 func hasDuplicate(nums []int) bool {
 	dupeMap := make(map[int]int)
@@ -342,6 +338,43 @@ func isPalindrome(s string) bool {
 }
 
 func threeSum(nums []int) [][]int {
+	ret := [][]int{}
+	slices.Sort(nums)
+	for i := 0; i < len(nums)-2; i++ {
+		// skip duplicates
+		if i > 0 && nums[i] == nums[i-1] {
+			continue
+		}
 
-	return [][]int{}
+		k := i + 1
+		j := len(nums) - 1
+
+		for k < j {
+			sum := nums[i] + nums[k] + nums[j]
+			if sum == 0 {
+				ret = append(ret, []int{
+					nums[i],
+					nums[k],
+					nums[j],
+				})
+
+				k++
+				j--
+
+				// skip duplicates
+				for k < j && nums[k] == nums[k-1] {
+					k++
+				}
+				for k < j && nums[j] == nums[j+1] {
+					j--
+				}
+			} else if sum < 0 {
+				k++
+			} else {
+				j--
+			}
+		}
+	}
+
+	return ret
 }

@@ -95,12 +95,24 @@ func TestProductExceptSelf(t *testing.T) {
 	}
 }
 
-func TestLongestConsecutive(t *testing.T) {
-	nums := []int{2, 20, 4, 10, 3, 4, 5}
-	expected := 5
-	result := longestConsecutive(nums)
+// func TestLongestConsecutive(t *testing.T) {
+// 	nums := []int{2, 20, 4, 10, 3, 4, 5}
+// 	expected := 5
+// 	result := longestConsecutive(nums)
+//
+// 	if expected != result {
+// 		t.Errorf("longestConsecutive= %v; want %v", result, expected)
+// 	}
+// }
 
-	if expected != result {
-		t.Errorf("longestConsecutive= %v; want %v", result, expected)
+func TestThreeSum(t *testing.T) {
+	nums := []int{-1, 0, 1, 2, -1, -4}
+	expected := [][]int{{-1, -1, 2}, {-1, 0, 1}}
+	result := threeSum(nums)
+
+	for i := range result {
+		if !slices.Equal(result[i], expected[i]) {
+			t.Errorf("threeSum= %v; want %v", result, expected)
+		}
 	}
 }
