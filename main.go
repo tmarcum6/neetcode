@@ -1,7 +1,6 @@
 package main
 
 import (
-	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -339,7 +338,9 @@ func isPalindrome(s string) bool {
 
 func threeSum(nums []int) [][]int {
 	ret := [][]int{}
-	slices.Sort(nums)
+
+	sort.Ints(nums)
+
 	for i := 0; i < len(nums)-2; i++ {
 		// skip duplicates
 		if i > 0 && nums[i] == nums[i-1] {
@@ -377,4 +378,47 @@ func threeSum(nums []int) [][]int {
 	}
 
 	return ret
+}
+
+// sort 2D slices
+func sort2D(nums [][]int) [][]int {
+	//inner slice sorting
+	for i := range nums {
+		sort.Ints(nums[i])
+	}
+
+	//outer slice sorting
+	sort.Slice(nums, func(i, j int) bool {
+		for x := 0; x < len(nums[i]) && x < len(nums[j]); x++ {
+
+			// only return if values differ
+			if nums[i][x] != nums[j][x] {
+				return nums[i][x] < nums[j][x]
+			}
+		}
+
+		// shorter slice first if identical prefix
+		return len(nums[i]) < len(nums[j])
+	})
+
+	return nums
+}
+
+// compare 2D slices
+func compare2D(a, b [][]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for j := range a {
+		if len(a[j]) != len(b[j]) {
+			return false
+		}
+		for i := range a[j] {
+			if a[j][i] != b[j][i] {
+				return false
+			}
+		}
+	}
+
+	return true
 }
