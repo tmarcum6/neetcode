@@ -174,3 +174,13 @@ func TestCheckMagazine(t *testing.T) {
 		t.Errorf("checkMagazine=%v; want %v", result2, expected2)
 	}
 }
+
+func TestLengthOfLongestSubstring(t *testing.T) {
+	s := "abcabcbb"
+	result := lengthOfLongestSubstring(s)
+	expected := 3
+
+	if result != expected {
+		t.Errorf("lengthOfLongestSubstring=%v; want %v", result, expected)
+	}
+}

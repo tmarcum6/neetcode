@@ -8,9 +8,8 @@ import (
 )
 
 func main() {
-	magazine := []string{"give", "me", "one", "grand", "today", "night"}
-	note := []string{"give", "one", "grand", "today"}
-	_ = checkMagazine(note, magazine)
+	s := "bbbbb"
+	_ = lengthOfLongestSubstring(s)
 }
 
 func hasDuplicate(nums []int) bool {
@@ -572,30 +571,46 @@ func isValidSudoku(board [][]byte) bool {
 }
 
 func checkMagazine(note, magazine []string) bool {
-	//put note in a map by strings in slice
+	// count words in magazine
+	counts := make(map[string]int)
 
-	//make a map
-	noteMap := make(map[string]int)
-
-	// add strings from note to map
-	for _, v := range note {
-		noteMap[v]++
+	for _, word := range magazine {
+		counts[word]++
 	}
 
-	//loop through magazine and increment count for key in map if exists
-	for _, v := range magazine {
-		if _, ok := noteMap[v]; ok {
-			noteMap[v]++
-		}
-	}
-
-	//check if all items in map have 2 if not, return false
-	fmt.Println(noteMap)
-	for _, v := range noteMap {
-		if v < 2 {
+	// try to build note from magazine counts
+	for _, word := range note {
+		if counts[word] == 0 {
 			return false
 		}
+		counts[word]--
 	}
 
 	return true
+}
+
+func lengthOfLongestSubstring(s string) int {
+	ret := 0
+	left := 0
+
+	m := make(map[rune]int)
+
+	for right, r := range s {
+
+		// if we've seen it and it's inside current window
+		if prevIndex, ok := m[r]; ok && prevIndex >= left {
+			left = prevIndex + 1
+		}
+
+		// update last seen index
+		m[r] = right
+
+		// compute window size
+		windowSize := right - left + 1
+		if windowSize > ret {
+			ret = windowSize
+		}
+	}
+
+	return ret
 }
