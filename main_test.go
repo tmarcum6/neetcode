@@ -116,3 +116,61 @@ func TestThreeSum(t *testing.T) {
 		}
 	}
 }
+
+func TestIsValidSudoku(t *testing.T) {
+	board1 := [][]byte{
+		{'1', '2', '.', '.', '3', '.', '.', '.', '.'},
+		{'4', '.', '.', '5', '.', '.', '.', '.', '.'},
+		{'.', '9', '8', '.', '.', '.', '.', '.', '3'},
+		{'5', '.', '.', '.', '6', '.', '.', '.', '4'},
+		{'.', '.', '.', '8', '.', '3', '.', '.', '5'},
+		{'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+		{'.', '.', '.', '.', '.', '.', '2', '.', '.'},
+		{'.', '.', '.', '4', '1', '9', '.', '.', '8'},
+		{'.', '.', '.', '.', '8', '.', '.', '7', '9'},
+	}
+	expected1 := true
+	result1 := isValidSudoku(board1)
+
+	if result1 != expected1 {
+		t.Errorf("isValidSudoku=%v; want %v", result1, expected1)
+	}
+
+	board2 := [][]byte{
+		{'1', '2', '.', '.', '3', '.', '.', '.', '.'},
+		{'4', '.', '.', '5', '.', '.', '.', '.', '.'},
+		{'.', '9', '1', '.', '.', '.', '.', '.', '3'},
+		{'5', '.', '.', '.', '6', '.', '.', '.', '4'},
+		{'.', '.', '.', '8', '.', '3', '.', '.', '5'},
+		{'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+		{'.', '.', '.', '.', '.', '.', '2', '.', '.'},
+		{'.', '.', '.', '4', '1', '9', '.', '.', '8'},
+		{'.', '.', '.', '.', '8', '.', '.', '7', '9'},
+	}
+	expected2 := false
+	result2 := isValidSudoku(board2)
+
+	if result1 != expected1 {
+		t.Errorf("isValidSudoku=%v; want %v", result2, expected2)
+	}
+}
+
+func TestCheckMagazine(t *testing.T) {
+	magazine := []string{"give", "me", "one", "grand", "today", "night"}
+	note := []string{"give", "one", "grand", "today"}
+	expected := true
+	result := checkMagazine(note, magazine)
+
+	if result != expected {
+		t.Errorf("checkMagazine=%v; want %v", result, expected)
+	}
+
+	magazine2 := []string{"two", "times", "three", "is", "not", "four"}
+	note2 := []string{"two", "times", "two", "is", "four"}
+	result2 := checkMagazine(note2, magazine2)
+	expected2 := false
+
+	if result2 != expected2 {
+		t.Errorf("checkMagazine=%v; want %v", result2, expected2)
+	}
+}

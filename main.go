@@ -1,12 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 )
 
-func main() {}
+func main() {
+	magazine := []string{"give", "me", "one", "grand", "today", "night"}
+	note := []string{"give", "one", "grand", "today"}
+	_ = checkMagazine(note, magazine)
+}
 
 func hasDuplicate(nums []int) bool {
 	dupeMap := make(map[int]int)
@@ -417,6 +422,178 @@ func compare2D(a, b [][]int) bool {
 			if a[j][i] != b[j][i] {
 				return false
 			}
+		}
+	}
+
+	return true
+}
+
+// 9x9
+// each row 1-9 (no dupes)
+// each column 1-9 (no dupes)
+// each of the nine 3x3 sub-boxes 1-9 (no dupes)
+func isValidSudoku(board [][]byte) bool {
+
+	// =========================================================
+	// TIME COMPLEXITY:
+	// O(1)
+	//
+	// Why?
+	// Sudoku board size is fixed at 9x9.
+	// Even though we use loops, the maximum work never grows.
+	//
+	// More specifically:
+	// - rows   -> 9 * 9
+	// - cols   -> 9 * 9
+	// - boxes  -> 9 * 9
+	//
+	// Total:
+	// 243 operations (constant)
+	//
+	// If generalized to an NxN board:
+	// TIME = O(N^2)
+	// =========================================================
+
+	// =========================================================
+	// SPACE COMPLEXITY:
+	// O(1)
+	//
+	// We only store small hash maps with at most:
+	// - digits 1-9
+	//
+	// Memory usage never grows beyond a constant size.
+	//
+	// Generalized:
+	// SPACE = O(N)
+	// =========================================================
+
+	// =========================================================
+	// CHECK ROWS
+	//
+	// Traverse left -> right across each row.
+	//
+	// Example:
+	// 5 3 . . 7 . . . .
+	//
+	// We use a map to track values already seen.
+	// =========================================================
+	for row := 0; row < 9; row++ {
+
+		seen := make(map[byte]bool)
+
+		for col := 0; col < 9; col++ {
+
+			val := board[row][col]
+
+			// Ignore empty cells
+			if val == '.' {
+				continue
+			}
+
+			// Duplicate found
+			if seen[val] {
+				return false
+			}
+
+			seen[val] = true
+		}
+	}
+
+	// =========================================================
+	// CHECK COLUMNS
+	//
+	// Traverse top -> bottom for each column.
+	//
+	// board[row][col]
+	//
+	// We swap traversal direction:
+	// - outer loop = columns
+	// - inner loop = rows
+	// =========================================================
+	for col := 0; col < 9; col++ {
+
+		seen := make(map[byte]bool)
+
+		for row := 0; row < 9; row++ {
+
+			val := board[row][col]
+
+			if val == '.' {
+				continue
+			}
+
+			if seen[val] {
+				return false
+			}
+
+			seen[val] = true
+		}
+	}
+
+	// =========================================================
+	// CHECK 3x3 SUB-BOXES
+	//
+	// Sudoku contains 9 sub-boxes:
+	//
+	// (0,0) (0,3) (0,6)
+	// (3,0) (3,3) (3,6)
+	// (6,0) (6,3) (6,6)
+	//
+	// boxRow * 3 gives starting row
+	// boxCol * 3 gives starting column
+	// =========================================================
+	for boxRow := 0; boxRow < 3; boxRow++ {
+		for boxCol := 0; boxCol < 3; boxCol++ {
+
+			seen := make(map[byte]bool)
+
+			// Traverse inside current 3x3 box
+			for row := boxRow * 3; row < boxRow*3+3; row++ {
+				for col := boxCol * 3; col < boxCol*3+3; col++ {
+
+					val := board[row][col]
+
+					if val == '.' {
+						continue
+					}
+
+					if seen[val] {
+						return false
+					}
+
+					seen[val] = true
+				}
+			}
+		}
+	}
+
+	// No duplicates found
+	return true
+}
+
+func checkMagazine(note, magazine []string) bool {
+	//put note in a map by strings in slice
+
+	//make a map
+	noteMap := make(map[string]int)
+
+	// add strings from note to map
+	for _, v := range note {
+		noteMap[v]++
+	}
+
+	//loop through magazine and increment count for key in map if exists
+	for _, v := range magazine {
+		if _, ok := noteMap[v]; ok {
+			noteMap[v]++
+		}
+	}
+
+	//check if all items in map have 2 if not, return false
+	fmt.Println(noteMap)
+	for _, v := range noteMap {
+		if v < 2 {
+			return false
 		}
 	}
 
