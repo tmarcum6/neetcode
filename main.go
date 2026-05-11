@@ -1,15 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	data := 4749
-	_ = intToRoman(data)
+	digits := "23"
+	_ = letterCombinations(digits)
 }
 
 func hasDuplicate(nums []int) bool {
@@ -651,8 +650,7 @@ func intToRoman(num int) string {
 
 	var builder strings.Builder
 
-	for i := 0; i < len(values); i++ {
-
+	for i := range values {
 		for num >= values[i] {
 			builder.WriteString(symbols[i])
 			num -= values[i]
@@ -660,4 +658,38 @@ func intToRoman(num int) string {
 	}
 
 	return builder.String()
+}
+
+func letterCombinations(digits string) []string {
+	//O(1)
+	letters := make(map[byte][]string)
+	letters['2'] = append(letters['2'], "a", "b", "c")
+	letters['3'] = append(letters['3'], "d", "e", "f")
+	letters['4'] = append(letters['4'], "g", "h", "i")
+	letters['5'] = append(letters['5'], "j", "k", "l")
+	letters['6'] = append(letters['6'], "m", "n", "o")
+	letters['7'] = append(letters['7'], "p", "q", "r", "s")
+	letters['8'] = append(letters['8'], "t", "u", "v")
+	letters['9'] = append(letters['9'], "w", "x", "y", "z")
+
+	ret := []string{""}
+
+	//O(n) n = number of digits
+	for _, v := range digits {
+		digit := byte(v)
+		next := []string{}
+
+		//O(4^n)
+		for _, v2 := range ret {
+			for _, v3 := range letters[digit] {
+				next = append(next, v2+v3)
+			}
+		}
+
+		ret = next
+	}
+
+	//Time/Space Complexity: O(4^n * n))
+
+	return ret
 }
