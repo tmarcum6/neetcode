@@ -1,14 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	digits := "23"
-	_ = letterCombinations(digits)
+	// logs := [][]string{
+	// 	{"1", "07-05-2026", "ERROR", "14:30"},
+	// 	{"2", "06-05-2026", "SUCCESS", "09:15"},
+	// 	{"3", "05-05-2026", "ERROR", "18:45"},
+	// 	{"4", "07-05-2026", "ERROR", "09:10"},
+	// }
+	// _ = getSortedErrorLogs(logs)
+
+	requestIDs := []string{"x", "y", "x", "x", "z"}
+	timeStamps := []int{1, 2, 5, 10, 4}
+	window := 3
+
+	countReoccurring(requestIDs, timeStamps, window)
 }
 
 func hasDuplicate(nums []int) bool {
@@ -680,9 +692,9 @@ func letterCombinations(digits string) []string {
 		next := []string{}
 
 		//O(4^n)
-		for _, v2 := range ret {
-			for _, v3 := range letters[digit] {
-				next = append(next, v2+v3)
+		for _, char1 := range ret {
+			for _, char2 := range letters[digit] {
+				next = append(next, char1+char2)
 			}
 		}
 
@@ -691,5 +703,95 @@ func letterCombinations(digits string) []string {
 
 	//Time/Space Complexity: O(4^n * n))
 
+	fmt.Println(ret)
 	return ret
 }
+
+type Log struct {
+	id     int
+	date   string
+	status string
+	time   string
+}
+
+func getSortedErrorLogs(logs [][]string) [][]string {
+	output := [][]string{}
+
+	for i := range logs {
+		if logs[i][2] == "ERROR" {
+			output = append(output, logs[i])
+		}
+	}
+
+	fmt.Println(output)
+
+	sort.Slice(output, func(i, j int) bool {
+		comp1 := buildDateTimeStamp(logs[i][1], logs[i][3])
+		comp2 := buildDateTimeStamp(logs[j][1], logs[j][3])
+		fmt.Println(comp1, comp2)
+		return comp1 < comp2
+	})
+
+	fmt.Println(output)
+	return output
+}
+
+func buildDateTimeStamp(d, t string) string {
+	//d = MM-DD-YYYY
+	//t = HH:MM
+
+	date := strings.Split(d, "-")
+	month := date[0]
+	day := date[1]
+	year := date[2]
+
+	time := strings.Split(t, ":")
+	hour := time[0]
+	minute := time[1]
+
+	//YYYYMMDDHHMM
+	dateTime := year + month + day + hour + minute
+
+	return dateTime
+}
+
+func countReoccurring(requestIDs []string, timeStamps []int, window int) int {
+	m := make(map[string][]int)
+
+	for k, v := range requestIDs {
+		m[v] = append(m[v], timeStamps[k])
+	}
+
+	count := 0
+	reoccurringCount := 0
+	for k, v := range m {
+		found := false
+		for _ = range m[k] {
+			count++
+		}
+		if count < 2 {
+			delete(m, k)
+		}
+		count = 0
+
+		sort.Ints(v)
+		for i := 1; i < len(v); i++ {
+			if v[i]-v[i-1] <= window {
+				found = true
+			}
+		}
+		if found {
+			reoccurringCount++
+		}
+	}
+
+	//return number of unique ids that reoccur within window
+	fmt.Println(reoccurringCount)
+	return reoccurringCount
+}
+
+func sortSentenceByLength() {}
+
+//go through all md docs
+//review functions here
+//time/space complexity
