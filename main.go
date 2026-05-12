@@ -16,11 +16,14 @@ func main() {
 	// }
 	// _ = getSortedErrorLogs(logs)
 
-	requestIDs := []string{"x", "y", "x", "x", "z"}
-	timeStamps := []int{1, 2, 5, 10, 4}
-	window := 3
+	// requestIDs := []string{"x", "y", "x", "x", "z"}
+	// timeStamps := []int{1, 2, 5, 10, 4}
+	// window := 3
+	//
+	// countReoccurring(requestIDs, timeStamps, window)
 
-	countReoccurring(requestIDs, timeStamps, window)
+	sentence := "this is a simple test"
+	_ = sortSentenceByLength(sentence)
 }
 
 func hasDuplicate(nums []int) bool {
@@ -766,7 +769,7 @@ func countReoccurring(requestIDs []string, timeStamps []int, window int) int {
 	reoccurringCount := 0
 	for k, v := range m {
 		found := false
-		for _ = range m[k] {
+		for range m[k] {
 			count++
 		}
 		if count < 2 {
@@ -785,12 +788,20 @@ func countReoccurring(requestIDs []string, timeStamps []int, window int) int {
 		}
 	}
 
-	//return number of unique ids that reoccur within window
-	fmt.Println(reoccurringCount)
 	return reoccurringCount
 }
 
-func sortSentenceByLength() {}
+func sortSentenceByLength(sentence string) string {
+	words := strings.Split(sentence, " ")
+
+	sort.SliceStable(words, func(i, j int) bool {
+		return len(words[i]) < len(words[j])
+	})
+
+	ret := strings.Join(words, " ")
+	fmt.Println(ret)
+	return ret
+}
 
 //go through all md docs
 //review functions here
